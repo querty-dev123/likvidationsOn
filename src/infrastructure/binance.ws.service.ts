@@ -34,16 +34,15 @@ export class BinanceWsService {
     });
 
     this.ws.on('message', (data) => {
-      console.log('Binance WS: Получено сообщение:', data.toString());
-try {
-    const event = JSON.parse(data.toString());
+      try {
+          const event = JSON.parse(data.toString());
 
-    if (event.e === 'forceOrder' && this.handler) {
-        this.handler(event as BinanceLiquidationEventDto);
-    }
-} catch (err) {
-    logger.error('Parse error:', err);
-}
+          if (event.e === 'forceOrder' && this.handler) {
+              this.handler(event as BinanceLiquidationEventDto);
+          }
+      } catch (err) {
+          logger.error('Parse error:', err);
+      }
     });
 
     this.ws.on('close', (code, reason) => {

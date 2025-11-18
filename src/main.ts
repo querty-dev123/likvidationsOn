@@ -1,4 +1,8 @@
 import 'reflect-metadata'; // Требуется для TypeORM
+
+import express from 'express';
+import type { Request, Response } from 'express';
+
 import logger from '@shared/logger';
 import { ConfigService } from '@shared/config.service';
 import { DatabaseService } from '@infrastructure/database.service';
@@ -6,6 +10,23 @@ import { TelegramService } from '@infrastructure/telegram.service';
 import { BinanceWsService } from '@infrastructure/binance.ws.service';
 import { SettingsService } from '@application/settings.service';
 import { AlertProcessor } from '@application/alert.processor';
+
+const server = express();
+const PORT: number = Number(process.env.PORT) || 8000; // Render требует переменную PORT
+
+// Здоровье бота
+server.get('/health', (_req: Request, res: Response) => {
+  res.status(200).send('Pump Scout Bot is alive!');
+});
+
+server.get('/', (_req: Request, res: Response) => {
+  res.send('<h1>Я на связи!</h1><p>/health — <- проверить пульс <3 </p>');
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Fake Express server listening on port ${PORT}`);
+});
+
 
 async function bootstrap() {
   logger.info('Запуск бота Pump Scout...');
