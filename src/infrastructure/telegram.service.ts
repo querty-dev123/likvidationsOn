@@ -31,7 +31,7 @@ export class TelegramService {
    */
   public async sendMessage(message: string): Promise<void> {
     try {
-      await this.bot.sendMessage(this.chatId, message, { parse_mode: 'HTML' });
+      await this.bot.sendMessage(this.chatId, message, { parse_mode: 'HTML', disable_web_page_preview: true });
     } catch (error) {
       logger.error('Ошибка отправки сообщения в Telegram:', error);
     }

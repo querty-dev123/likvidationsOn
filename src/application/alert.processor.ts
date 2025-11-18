@@ -61,22 +61,19 @@ export class AlertProcessor {
   /**
    * Отправляет отформатированное уведомление в Telegram.
    */
-  private async sendNotification(symbol: string, amountUsd: number, side: Side, type: LiquidationType): Promise<void> {
+  private async sendNotification(
+    symbol: string,
+    amountUsd: number,
+    side: Side,
+    type: LiquidationType
+  ): Promise<void> {
     const marker = type === 'LIQUIDATION' ? '❌' : '✅';
-    const typeLabel = type === 'LIQUIDATION' 
-        ? (side === 'BUY' ? '🔥 Long Liquidation' : '❄️ Short Liquidation')
-        : '💰 Крупная Сделка';
 
-    // Можно поменять на TradingView или оставить Coinglass
-    const coinglassLink = `https://www.coinglass.com/huobi/futures/${symbol.toLowerCase()}`;
-    // Альтернатива: const tvLink = `https://ru.tradingview.com/chart/?symbol=BINANCE:${symbol}PERP`;
+    // Ссылка на Binance Futures
+    const binanceLink = `https://www.binance.com/en/futures/${symbol}`;
 
     const message = `
-<b>${marker} ${symbol}</b> | ${typeLabel}
-Сумма: <b>$${amountUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}</b>
-Направление: <i>${side === 'BUY' ? 'Long' : 'Short'}</i>
-Источник: <a href="${coinglassLink}">Coinglass</a>
-    `.trim();
+  <b>${marker} <a href="${binanceLink}">${symbol}</a></b> | 🪙 <b>$${amountUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}</b>`.trim();
 
     logger.info(`[ALERT] ${marker} ${symbol} — $${amountUsd.toFixed(0)} (${side})`);
     await this.telegramService.sendMessage(message);
