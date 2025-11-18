@@ -1,0 +1,8 @@
+/node_modules
+/dist
+/logs
+
+singlefile-code.txt
+code-to-txt-export.ps1
+.env
+*.sqlite
